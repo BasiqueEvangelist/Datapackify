@@ -12,32 +12,32 @@ import java.util.List;
 @Mixin(BrewingRecipeRegistry.class)
 public interface BrewingRecipeRegistryAccessors {
     @Accessor(value = "ITEM_RECIPES")
-    public static List<BrewingRecipeRegistry.Recipe<Item>> getItemRecipes() {
+    static List<BrewingRecipeRegistry.Recipe<Item>> getItemRecipes() {
         throw new UnsupportedOperationException("Mixin failed to apply");
     }
 
     @Accessor(value = "POTION_RECIPES")
-    public static List<BrewingRecipeRegistry.Recipe<Potion>> getPotionRecipes() {
+    static List<BrewingRecipeRegistry.Recipe<Potion>> getPotionRecipes() {
         throw new UnsupportedOperationException("Mixin failed to apply");
     }
 
     @Accessor(value = "POTION_TYPES")
-    public static List<Ingredient> getPotionTypes() {
+    static List<Ingredient> getPotionTypes() {
         throw new UnsupportedOperationException("Mixin failed to apply");
     }
 
     @Accessor(value = "ITEM_RECIPES")
-    public static void setItemRecipes(List<BrewingRecipeRegistry.Recipe<Item>> value) {
+    static void setItemRecipes(List<BrewingRecipeRegistry.Recipe<Item>> value) {
         throw new UnsupportedOperationException("Mixin failed to apply");
     }
 
     @Accessor(value = "POTION_RECIPES")
-    public static void setPotionRecipes(List<BrewingRecipeRegistry.Recipe<Potion>> value) {
+    static void setPotionRecipes(List<BrewingRecipeRegistry.Recipe<Potion>> value) {
         throw new UnsupportedOperationException("Mixin failed to apply");
     }
 
     @Accessor(value = "POTION_TYPES")
-    public static void setPotionTypes(List<Ingredient> value) {
+    static void setPotionTypes(List<Ingredient> value) {
         throw new UnsupportedOperationException("Mixin failed to apply");
     }
 }

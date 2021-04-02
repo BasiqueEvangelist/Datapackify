@@ -8,12 +8,12 @@
     "BrewingRecipeRegistryMixin",
     "CookingRecipeSerializerMixin",
     "LocationPredicateMixin",
+    "ProcessItemFactoryAccessor",
+    "SellEnchantedToolFactoryAccessor",
     "SellItemFactoryMixin",
+    "SellPotionHoldingItemFactoryAccessor",
+    "SellSuspiciousStewFactoryAccessor",
     "ShapedRecipeMixin",
-    "TradeOffersAccessors$GlobalAcc",
-    "TradeOffersAccessors$ProcessItemFactoryMixin",
-    "TradeOffersAccessors$SellEnchantedToolFactoryMixin",
-    "TradeOffersAccessors$SellPotionHoldingItemFactoryMixin",
-    "TradeOffersAccessors$SellSuspiciousStewFactoryMixin"
+    "TradeOffersAccessor"
   ]
 }

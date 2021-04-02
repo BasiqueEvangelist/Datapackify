@@ -3,6 +3,10 @@ package me.basiqueevangelist.datapackify.trades
 import com.google.gson.JsonObject
 import me.basiqueevangelist.datapackify.Datapackify
 import me.basiqueevangelist.datapackify.JsonUtils
+import me.basiqueevangelist.datapackify.mixins.ProcessItemFactoryAccessor
+import me.basiqueevangelist.datapackify.mixins.SellEnchantedToolFactoryAccessor
+import me.basiqueevangelist.datapackify.mixins.SellPotionHoldingItemFactoryAccessor
+import me.basiqueevangelist.datapackify.mixins.SellSuspiciousStewFactoryAccessor
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.item.Item
@@ -53,7 +57,7 @@ object VillagerTrades {
                 JsonHelper.getInt(obj, "experience"),
                 JsonHelper.getFloat(obj, "multiplier", 0.05f)
             )
-            (fac as MainItemSellAcc).setMainStack(JsonUtils.makeItemStack(JsonUtils.get(obj, "tool")))
+            (fac as SellEnchantedToolFactoryAccessor).`datapackify$setTool`(JsonUtils.makeItemStack(JsonUtils.get(obj, "tool")))
             fac
         }
         register("minecraft:sell_map") { obj ->
@@ -71,7 +75,7 @@ object VillagerTrades {
                 JsonHelper.getInt(obj, "duration"),
                 JsonHelper.getInt(obj, "experience")
             )
-            (fac as MultiplierAcc).setMultiplier(JsonHelper.getFloat(obj, "multiplier", 0.05f))
+            (fac as SellSuspiciousStewFactoryAccessor).`datapackify$setMultiplier`(JsonHelper.getFloat(obj, "multiplier", 0.05f))
             fac
         }
         register("minecraft:process_item") { obj ->
@@ -84,9 +88,10 @@ object VillagerTrades {
                 JsonHelper.getInt(obj, "max_uses"),
                 JsonHelper.getInt(obj, "experience")
             )
-            (fac as MultiplierAcc).setMultiplier(JsonHelper.getFloat(obj, "multiplier", 0.05f))
-            (fac as SecondaryItemSellAcc).setSecondaryStack(JsonUtils.makeItemStack(JsonUtils.get(obj, "second_buy")))
-            (fac as MainItemSellAcc).setMainStack( JsonUtils.makeItemStack(JsonUtils.get(obj, "sell")))
+            require(fac is ProcessItemFactoryAccessor)
+            fac.`datapackify$setMultiplier`(JsonHelper.getFloat(obj, "multiplier", 0.05f))
+            fac.`datapackify$setSecondBuy`(JsonUtils.makeItemStack(JsonUtils.get(obj, "second_buy")))
+            fac.`datapackify$setSell`( JsonUtils.makeItemStack(JsonUtils.get(obj, "sell")))
             fac
         }
         register("minecraft:type_aware_buy_for_one_emerald") { obj ->
@@ -107,7 +112,7 @@ object VillagerTrades {
                 JsonHelper.getInt(obj, "max_uses"),
                 JsonHelper.getInt(obj, "experience")
             )
-            (fac as MainItemSellAcc).setMainStack(JsonUtils.makeItemStack(JsonUtils.get(obj, "sell")))
+            (fac as SellPotionHoldingItemFactoryAccessor).`datapackify$setSell`(JsonUtils.makeItemStack(JsonUtils.get(obj, "sell")))
             fac
         }
         register("minecraft:sell_dyed_armor") { obj ->
@@ -165,7 +170,7 @@ object VillagerTrades {
         }
     }
 
-    private fun typeAwareItemMap(obj: JsonObject): Map<VillagerType, Item>? {
+    private fun typeAwareItemMap(obj: JsonObject): Map<VillagerType, Item> {
         val map: MutableMap<VillagerType, Item> = HashMap()
         for ((key, value) in obj.entrySet()) {
             val res = JsonUtils.getRegistryItem(Registry.VILLAGER_TYPE, key)

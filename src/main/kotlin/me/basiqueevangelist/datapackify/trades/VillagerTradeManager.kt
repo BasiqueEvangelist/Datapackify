@@ -7,7 +7,7 @@ import com.google.gson.JsonParseException
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import me.basiqueevangelist.datapackify.Datapackify
-import me.basiqueevangelist.datapackify.mixins.TradeOffersAccessors
+import me.basiqueevangelist.datapackify.mixins.TradeOffersAccessor
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.minecraft.resource.JsonDataLoader
 import net.minecraft.resource.ResourceManager
@@ -26,7 +26,7 @@ class VillagerTradeManager : JsonDataLoader(GSON, "villager_trades"), Identifiab
         private val GSON = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()
     }
 
-    override fun getFabricId(): Identifier? {
+    override fun getFabricId(): Identifier {
         return Identifier(Datapackify.NAMESPACE, "villager_trades")
     }
 
@@ -41,7 +41,7 @@ class VillagerTradeManager : JsonDataLoader(GSON, "villager_trades"), Identifiab
             LOGGER.debug("Got {}", key)
             try {
                 val obj = JsonHelper.asObject(value, "<file>")
-                val e = parseFile(obj)
+                val e = JsonHelper.getArray(obj, "trades").map(::parseTrade).toTypedArray()
                 val profId =
                     Identifier(
                         JsonHelper.getString(
@@ -79,29 +79,19 @@ class VillagerTradeManager : JsonDataLoader(GSON, "villager_trades"), Identifiab
             }
             finalMap[key] = profMap
         }
-        TradeOffersAccessors.GlobalAcc.setTrades(finalMap)
+        TradeOffersAccessor.setTrades(finalMap)
         val finalWanderingMap = Int2ObjectOpenHashMap<Array<TradeOffers.Factory>>()
         for ((key, value) in wanderingTrades) {
             finalWanderingMap[key.toInt()] = value.toTypedArray()
         }
-        TradeOffersAccessors.GlobalAcc.setWanderingTrades(finalWanderingMap)
-    }
-
-    private fun parseFile(obj: JsonObject): Array<TradeOffers.Factory> {
-        val trades = JsonHelper.getArray(obj, "trades")
-        val value: Array<TradeOffers.Factory?> = arrayOfNulls(trades.size())
-        var i = 0
-        for (trade in trades) {
-            value[i++] = parseTrade(trade)
-        }
-        return value as Array<TradeOffers.Factory>
+        TradeOffersAccessor.setWanderingTrades(finalWanderingMap)
     }
 
     private fun parseTrade(trade: JsonElement): TradeOffers.Factory {
         val obj = JsonHelper.asObject(trade, "trade")
         val type = Identifier(JsonHelper.getString(obj, "type"))
         val res = VillagerTrades.REGISTRY.getOrEmpty(type)
-        kotlin.require(res.isPresent) { "Invalid factory type $type" }
+        require(res.isPresent) { "Invalid factory type $type" }
         return res.get().deserialize(obj)
     }
 }
