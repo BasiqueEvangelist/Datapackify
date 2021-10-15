@@ -3,17 +3,14 @@
   "compatibilityLevel": "JAVA_8",
   "package": "me.basiqueevangelist.datapackify.mixins",
   "mixins": [
-    "AbstractFurnaceBlockEntityMixin",
     "BrewingRecipeRegistryAccessors",
     "BrewingRecipeRegistryMixin",
-    "CookingRecipeSerializerMixin",
     "LocationPredicateMixin",
     "ProcessItemFactoryAccessor",
     "SellEnchantedToolFactoryAccessor",
     "SellItemFactoryMixin",
     "SellPotionHoldingItemFactoryAccessor",
     "SellSuspiciousStewFactoryAccessor",
-    "ShapedRecipeMixin",
     "StructureStartAccessor",
     "TradeOffersAccessor"
   ]

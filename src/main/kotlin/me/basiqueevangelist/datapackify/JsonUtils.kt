@@ -25,7 +25,6 @@ object JsonUtils {
                 JsonHelper.getItem(obj, "item"),
                 JsonHelper.getInt(obj, "count", 1)
             )
-            ItemStackTransformers.transform(obj, ist)
             ist
         }
     }
