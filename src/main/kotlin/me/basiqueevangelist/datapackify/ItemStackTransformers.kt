@@ -7,8 +7,8 @@ import net.minecraft.enchantment.EnchantmentLevelEntry
 import net.minecraft.item.EnchantedBookItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.NbtCompound
+import net.minecraft.nbt.NbtList
 import net.minecraft.nbt.StringNbtReader
 import net.minecraft.util.Identifier
 import net.minecraft.util.JsonHelper
@@ -28,7 +28,7 @@ object ItemStackTransformers : ItemStackTransformer {
             throw IllegalArgumentException("Could not parse NBT tag: $cse")
         }
 
-        stack.orCreateTag.copyFrom(newTag)
+        stack.orCreateNbt.copyFrom(newTag)
     })
 
     val DURABILITY = Registry.register(REGISTRY, Identifier("durability"), ItemStackTransformer { data, stack ->
@@ -36,8 +36,8 @@ object ItemStackTransformers : ItemStackTransformer {
     })
 
     val ENCHANTMENTS = Registry.register(REGISTRY, Identifier("enchantments"), ItemStackTransformer { data, stack ->
-        if ("Enchantments" !in stack.orCreateTag && stack.item != Items.ENCHANTED_BOOK)
-            stack.orCreateTag.put("Enchantments", ListTag())
+        if ("Enchantments" !in stack.orCreateNbt && stack.item != Items.ENCHANTED_BOOK)
+            stack.orCreateNbt.put("Enchantments", NbtList())
         for ((enchIdStr, levelEl) in JsonHelper.asObject(data, "minecraft:enchantments").entrySet()) {
             val enchId = Identifier(enchIdStr)
             val ench = Registry.ENCHANTMENT.getOrEmpty(enchId).orElseThrow {
@@ -47,7 +47,7 @@ object ItemStackTransformers : ItemStackTransformer {
             if (stack.item == Items.ENCHANTED_BOOK)
                 EnchantedBookItem.addEnchantment(stack, EnchantmentLevelEntry(ench, level))
             else {
-                val enchTag = CompoundTag()
+                val enchTag = NbtCompound()
                 enchTag.putString("id", enchId.toString())
                 enchTag.putShort("lvl", level.toShort())
                 stack.enchantments.add(enchTag)

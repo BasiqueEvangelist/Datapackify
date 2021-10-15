@@ -48,8 +48,8 @@ public class LocationPredicateMixin {
         return pred;
     }
 
-    @Inject(method = "test(Lnet/minecraft/server/world/ServerWorld;FFF)Z", at = @At("TAIL"), cancellable = true)
-    private void checkStructureFeature(ServerWorld world, float x, float y, float z, CallbackInfoReturnable<Boolean> cb) {
+    @Inject(method = "test", at = @At("TAIL"), cancellable = true)
+    private void checkStructureFeature(ServerWorld world, double x, double y, double z, CallbackInfoReturnable<Boolean> cb) {
         if (cb.getReturnValue() && structurePiece != null) {
             world.getProfiler().push("datapackify:checkStructureFeature");
             BlockPos pos = new BlockPos(x, y, z);
@@ -58,7 +58,7 @@ public class LocationPredicateMixin {
             for (Map.Entry<StructureFeature<?>, LongSet> starts : world.getChunk((int)x >> 4, (int)z >> 4, ChunkStatus.STRUCTURE_REFERENCES).getStructureReferences().entrySet()) {
                 starts.getValue().forEach((LongConsumer) startPos -> {
                     StructureStart<?> start = world.getChunk(ChunkPos.getPackedX(startPos), ChunkPos.getPackedZ(startPos), ChunkStatus.STRUCTURE_STARTS).getStructureStart(starts.getKey());
-                    if (start.getBoundingBox().contains(pos)) {
+                    if (((StructureStartAccessor) start).getBoundingBox().contains(pos)) {
                         for (StructurePiece piece : start.getChildren()) {
                             if (piece.getBoundingBox().contains(pos) && Registry.STRUCTURE_PIECE.getId(piece.getType()).equals(structurePiece)) {
                                 cb.setReturnValue(true);

@@ -14,6 +14,7 @@
     "SellPotionHoldingItemFactoryAccessor",
     "SellSuspiciousStewFactoryAccessor",
     "ShapedRecipeMixin",
+    "StructureStartAccessor",
     "TradeOffersAccessor"
   ]
 }

@@ -5,6 +5,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.minecraft.recipe.Ingredient;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
@@ -27,16 +28,19 @@ public interface BrewingRecipeRegistryAccessors {
     }
 
     @Accessor(value = "ITEM_RECIPES")
+    @Mutable
     static void setItemRecipes(List<BrewingRecipeRegistry.Recipe<Item>> value) {
         throw new UnsupportedOperationException("Mixin failed to apply");
     }
 
     @Accessor(value = "POTION_RECIPES")
+    @Mutable
     static void setPotionRecipes(List<BrewingRecipeRegistry.Recipe<Potion>> value) {
         throw new UnsupportedOperationException("Mixin failed to apply");
     }
 
     @Accessor(value = "POTION_TYPES")
+    @Mutable
     static void setPotionTypes(List<Ingredient> value) {
         throw new UnsupportedOperationException("Mixin failed to apply");
     }

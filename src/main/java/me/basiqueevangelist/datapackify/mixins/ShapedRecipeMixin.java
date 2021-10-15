@@ -15,7 +15,7 @@ public class ShapedRecipeMixin {
      * @author BasiqueEvangelist
      */
     @Overwrite
-    public static ItemStack getItemStack(JsonObject json) {
+    public static ItemStack outputFromJson(JsonObject json) {
         return JsonUtils.INSTANCE.makeItemStack(json);
     }
 }

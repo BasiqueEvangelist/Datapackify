@@ -7,7 +7,7 @@ import me.basiqueevangelist.datapackify.Datapackify
 import me.basiqueevangelist.datapackify.JsonUtils
 import me.basiqueevangelist.datapackify.mixins.BrewingRecipeRegistryAccessors
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
-import net.fabricmc.fabric.api.tag.TagRegistry
+import net.fabricmc.fabric.api.tag.TagFactory
 import net.minecraft.item.Item
 import net.minecraft.potion.Potion
 import net.minecraft.recipe.BrewingRecipeRegistry
@@ -82,7 +82,7 @@ class BrewingRecipeManager : JsonDataLoader(GSON, "brewing_recipes"), Identifiab
         newPotionRecipes.addAll(PRESET_POTION_RECIPES!!)
 
         val potionTypes =
-            arrayListOf<Ingredient>(Ingredient.fromTag(TagRegistry.item(Identifier("minecraft:potions"))))
+            arrayListOf<Ingredient>(Ingredient.fromTag(TagFactory.ITEM.create(Identifier("minecraft:potions"))))
         potionTypes.addAll(PRESET_POTION_TYPES!!)
 
         BrewingRecipeRegistryAccessors.setItemRecipes(newItemRecipes)
