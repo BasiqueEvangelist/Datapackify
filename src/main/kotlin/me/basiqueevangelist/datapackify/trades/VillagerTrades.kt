@@ -26,7 +26,7 @@ object VillagerTrades {
         Identifier(Datapackify.NAMESPACE, "villager_trades"),
         Identifier(Datapackify.NAMESPACE, "empty")
     ).buildAndRegister()
-    private val VILLAGER_TRADES = VillagerTradeManager()
+    public val VILLAGER_TRADES = VillagerTradeManager()
 
     fun init() {
         register(Datapackify.NAMESPACE + "empty") { _ -> Factory { _, _ -> null } }

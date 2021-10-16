@@ -26,11 +26,15 @@ class VillagerTradeManager : JsonDataLoader(GSON, "villager_trades"), Identifiab
         private val GSON = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()
     }
 
+    public val errorList: MutableList<TradeParsingError> = mutableListOf()
+
     override fun getFabricId(): Identifier {
         return Identifier(Datapackify.NAMESPACE, "villager_trades")
     }
 
-    override fun apply(loader: Map<Identifier?, JsonElement>, manager: ResourceManager?, profiler: Profiler?) {
+    override fun apply(loader: Map<Identifier, JsonElement>, manager: ResourceManager?, profiler: Profiler?) {
+        errorList.clear()
+
         val trades = HashMap<VillagerProfession, Int2ObjectOpenHashMap<MutableList<TradeOffers.Factory>>>()
         val wanderingTrades = Int2ObjectOpenHashMap<MutableList<TradeOffers.Factory>>()
 
@@ -38,7 +42,6 @@ class VillagerTradeManager : JsonDataLoader(GSON, "villager_trades"), Identifiab
             trades[prof] = Int2ObjectOpenHashMap<MutableList<TradeOffers.Factory>>()
         }
         for ((key, value) in loader) {
-            LOGGER.debug("Got {}", key)
             try {
                 val obj = JsonHelper.asObject(value, "<file>")
                 val e = JsonHelper.getArray(obj, "trades").map(::parseTrade).toTypedArray()
@@ -63,11 +66,11 @@ class VillagerTradeManager : JsonDataLoader(GSON, "villager_trades"), Identifiab
                     arrayListOf(*e)
                 ) else map[careerLevel] = arrayListOf(*e)
             } catch (e: IllegalArgumentException) {
-                LOGGER.error("Encountered error while parsing {}: {}", key, e)
-                e.printStackTrace()
+                LOGGER.error("Encountered error while parsing {}", key, e)
+                errorList.add(TradeParsingError(key, e))
             } catch (e: JsonParseException) {
-                LOGGER.error("Encountered error while parsing {}: {}", key, e)
-                e.printStackTrace()
+                LOGGER.error("Encountered error while parsing {}", key, e)
+                errorList.add(TradeParsingError(key, e))
             }
         }
         LOGGER.info("Loaded ${trades.size + wanderingTrades.size} villager trades.")
