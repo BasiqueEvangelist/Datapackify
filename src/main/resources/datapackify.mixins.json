@@ -5,6 +5,7 @@
   "mixins": [
     "BrewingRecipeRegistryAccessors",
     "BrewingRecipeRegistryMixin",
+    "JsonDataLoaderMixin",
     "LocationPredicateMixin",
     "ProcessItemFactoryAccessor",
     "SellEnchantedToolFactoryAccessor",
