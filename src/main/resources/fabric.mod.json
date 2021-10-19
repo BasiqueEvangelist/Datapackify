@@ -11,10 +11,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      {
-        "adapter": "kotlin",
-        "value": "me.basiqueevangelist.datapackify.Datapackify"
-      }
+      "me.basiqueevangelist.datapackify.Datapackify"
     ]
   },
   "accessWidener": "datapackify.accesswidener",
@@ -24,7 +21,6 @@
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "fabric-language-kotlin": "*",
     "minecraft": "1.17.x"
   }
 }
