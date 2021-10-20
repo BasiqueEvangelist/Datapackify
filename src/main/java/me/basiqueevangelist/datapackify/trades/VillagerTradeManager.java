@@ -1,6 +1,5 @@
 package me.basiqueevangelist.datapackify.trades;
 
-import com.google.common.collect.Lists;
 import com.google.gson.*;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -93,11 +92,11 @@ public class VillagerTradeManager extends JsonDataLoader implements Identifiable
     private static TradeOffers.Factory parseTrade(JsonElement trade) {
         JsonObject obj = JsonHelper.asObject(trade, "trade");
         var type = new Identifier(JsonHelper.getString(obj, "type"));
-        Optional<IOfferFactoryType> res = VillagerTrades.REGISTRY.getOrEmpty(type);
-        if (res.isEmpty()) {
+        IOfferFactoryType<?> res = VillagerTrades.OFFER_FACTORIES.get(type);
+        if (res == null) {
             throw new IllegalArgumentException("Invalid factory type" + type);
         }
 
-        return res.get().deserialize(obj);
+        return res.deserialize(obj);
     }
 }

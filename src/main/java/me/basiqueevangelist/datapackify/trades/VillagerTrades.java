@@ -7,7 +7,6 @@ import me.basiqueevangelist.datapackify.mixins.ProcessItemFactoryAccessor;
 import me.basiqueevangelist.datapackify.mixins.SellEnchantedToolFactoryAccessor;
 import me.basiqueevangelist.datapackify.mixins.SellPotionHoldingItemFactoryAccessor;
 import me.basiqueevangelist.datapackify.mixins.SellSuspiciousStewFactoryAccessor;
-import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -26,11 +25,7 @@ public final class VillagerTrades {
 
     }
 
-    public static final Registry<IOfferFactoryType> REGISTRY = FabricRegistryBuilder.createDefaulted(
-        IOfferFactoryType.class,
-        new Identifier(Datapackify.NAMESPACE, "villager_trades"),
-        new Identifier(Datapackify.NAMESPACE, "empty")
-    ).buildAndRegister();
+    static final Map<Identifier, IOfferFactoryType<?>> OFFER_FACTORIES = new HashMap<>();
 
     public static void init() {
         register(Datapackify.NAMESPACE + "empty", (obj) -> (e, r) -> null);
@@ -136,8 +131,9 @@ public final class VillagerTrades {
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new VillagerTradeManager());
     }
 
-    private static <T extends TradeOffers.Factory> IOfferFactoryType<T> register(String name, IOfferFactoryType<T> fac) {
-        return Registry.register(REGISTRY, new Identifier(name), fac);
+    public static <T extends TradeOffers.Factory> IOfferFactoryType<T> register(String name, IOfferFactoryType<T> fac) {
+        OFFER_FACTORIES.put(new Identifier(name), fac);
+        return fac;
     }
 
     private static MapIcon.Type getMapIconType(String s) {
