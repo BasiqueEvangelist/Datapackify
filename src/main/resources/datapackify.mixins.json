@@ -8,6 +8,7 @@
     "JsonDataLoaderMixin",
     "LocationPredicateMixin",
     "ProcessItemFactoryAccessor",
+    "ReloadableResourceManagerImplMixin",
     "SellEnchantedToolFactoryAccessor",
     "SellItemFactoryMixin",
     "SellPotionHoldingItemFactoryAccessor",

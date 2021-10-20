@@ -19,9 +19,7 @@ import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BrewingRecipeManager extends JsonDataLoader implements IdentifiableResourceReloadListener {
     private static final Logger LOGGER = LogManager.getLogger("Datapackify/BrewingRecipeManager");
@@ -79,7 +77,7 @@ public class BrewingRecipeManager extends JsonDataLoader implements Identifiable
         newPotionRecipes.addAll(PRESET_POTION_RECIPES);
 
         List<Ingredient> potionTypes =
-            new ArrayList<>(List.of(Ingredient.fromTag(TagFactory.ITEM.create(new Identifier("minecraft:potions")))));
+            new ArrayList<>(Collections.singletonList(Ingredient.fromTag(TagFactory.ITEM.create(new Identifier("minecraft:potions")))));
         potionTypes.addAll(PRESET_POTION_TYPES);
 
         BrewingRecipeRegistryAccessors.setItemRecipes(newItemRecipes);
